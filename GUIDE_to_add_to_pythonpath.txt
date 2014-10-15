@@ -1,0 +1,86 @@
+
+UPDATE: 2014/09/02
+Changed: Switched to new approach
+------
+Short Description:
+File:
+	/user/lib64/python2.6/site-packages/cccid_custom_packages.pth
+Contents:
+	/data/htdocs/pylibs/
+	/data/htdocs/pylibs/module_links/
+Folders:
+	(1) /data/htdocs/pylibs/
+	Contains packages as hosted on Bitbucket/Github - specifically, an outer folder with metadata & build-files, and an inner folder with the Python scripts.
+	A typical organization might be organized like:
+		/data/htdocs/pylibs/sqlfront/
+			.gitignore
+			.pylintrc
+			setup.py
+			README.rst
+			setup.py
+			sqlfront/
+				__init__.py
+				interfaces/
+					__init__.py
+					...
+				mysql/
+					__init__.py
+					...
+	(2) /data/htdocs/pylibs/module_links/
+	Contains symbolic links to the folder containing __init__.py for packages I want to be include-able.
+	So, for example, for sqlfront/, it would include the symbolic link:
+		sqlfront -> ../sqlfront/sqlfront/
+
+
+
+=======================================================================
+	Old Method of adding custom modules to pythonpath
+		Pre-2014/09/02
+=======================================================================
+------- For All Instances of Python on this computer -------
+As root, create a *.pth file for this directory/package inside the 'site-packages/' folder, or 'dist-packages/' in Debian (such as Ubuntu).
+This file should contain the full path for the directory of Python scripts you wish to include.
+
+For example:
+Create: 
+	/usr/lib64/python2.6/site-packages/custom_packages.pth
+Containing the following line:
+	/data/htdocs/pylibs/
+
+
+Note:
+	I have installed this as gdid_custom_packages.pth, to: 
+		/usr/lib64/python2.6/site-packages/cccid_custom_packages.pth
+	containing the lines:
+		/data/htdocs/pylibs/
+		/data/htdocs/pylibs/module_links
+	Where module_links/ is a folder of symbolic links to the folders
+	containing __init__.py for the packages. Necessary since:
+		/data/htdocs/pylibs/unroll/
+			CONTRIBUTORS.txt # and similar packaging meta-data
+			...
+			unroll/
+				__init__.py #actual python package starts here - 1 level deep
+				... 
+	
+------ Alternately: To set path for Apache ------
+** UPDATE: I have had trouble with this, and no longer use it.cd
+For all sites running through Apache:
+	/etc/httpd/conf/httpd.conf
+For specific site: (ex. gdid only) 
+	/etc/httpd/conf.d/SPECIFIC.conf
+	ex. /etc/httpd/conf.d/gdid.conf
+
+Inside the <VirtualHost tag, inside a <Directory tag for the directory you wish to change the PythonPath for:
+Add: 
+	PythonPath "['DIRECTORY']" + sys.path" 
+
+For example, to set PythonPath for specific folder:
+
+<VirtualHost *:80>
+	#... 
+	#... various additional material
+	#...
+	<Directory "/data/htdocs/gdid/rebuild/">
+        PythonPath "['/data/htdocs/gdid/python/scratch/'] + sys.path"
+    </Directory>

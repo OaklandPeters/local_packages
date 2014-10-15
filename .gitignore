@@ -1,0 +1,10 @@
+
+# Compiled bytecode of Python files
+*.pyc
+
+# Eclipse-only files
+/.project
+/.pydevproject
+
+# Scratch space directory
+/scratch

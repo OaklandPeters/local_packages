@@ -1,0 +1,7 @@
+{
+"host":"localhost",
+"user":"Peters",
+"passwd":"tsibetcwwi",
+"unix_socket":"/var/lib/mysql/mysql.sock",
+"default_db":"drug_db"
+}
